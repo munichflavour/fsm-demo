@@ -529,9 +529,9 @@ h2{letter-spacing:-.01em}
 
 <script>
 "use strict";
-const DAYS=['2026-11-02','2026-11-03','2026-11-04','2026-11-05','2026-11-06'];
+const DAYS=['2026-11-09','2026-11-10','2026-11-11','2026-11-12','2026-11-13'];
 const DN=['Mo','Di','Mi','Do','Fr'];
-const TODAY='2026-11-04';
+const TODAY='2026-11-13';
 const fd=d=>d.slice(8)+'.'+d.slice(5,7)+'.';
 const fdFull=d=>fd(d)+d.slice(0,4);
 const nf=h=>String(Math.round(h*100)/100).replace('.',',');
@@ -575,15 +575,15 @@ function init(){
   const mk=(proj,key,pk,from,to,hpd)=>{const id=String(wn++);WID[proj+':'+key]=id;WL.push([id,proj,key==='C'?'Coordination':'Commissioning',pk,from,to,hpd||8,key==='V']);return id};
   [['P-24-0815','pkM'],['P-24-0818','pkM'],['P-24-0819','pkM'],['P-24-0887','pkM'],['P-24-0888','pkM'],['P-24-0816','pkR'],['P-24-0889','pkR'],['P-24-0890','pkR'],['P-24-0831','pkD'],['P-24-0833','pkD'],['P-24-0891','pkD'],['P-24-0832','pkE'],['P-24-0892','pkE'],['P-24-0893','pkE'],['P-24-0830','pkL'],['P-24-0894','pkL'],['P-24-0895','pkL']].forEach(([pr,pk])=>{
     mk(pr,'C',pk);
-    if(pr==='P-24-0833'){mk(pr,'V',pk,'2026-10-12','2026-10-23');mk(pr,'E',pk,'2026-11-09','2026-11-27')}else mk(pr,'E',pk)});
+    if(pr==='P-24-0833'){mk(pr,'V',pk,'2026-10-19','2026-10-30');mk(pr,'E',pk,'2026-11-16','2026-12-04')}else mk(pr,'E',pk)});
   const DOM=[['P-24-0790','pkW1'],['P-24-0801','pkW2'],['P-24-0840','pkW3'],['P-24-0841','pkW4'],['P-24-0842','pkW5'],['P-24-0843','pkW5']];
-  const WK0='2026-09-28',wk=i=>isoAdd(WK0,i*7),wkEnd=i=>isoAdd(wk(i),4);
+  const WK0='2026-10-05',wk=i=>isoAdd(WK0,i*7),wkEnd=i=>isoAdd(wk(i),4);
   const VOR={'P-24-0790':[0,2],'P-24-0801':[3,5],'P-24-0840':[6,8],'P-24-0842':[9,11]};
   DOM.forEach(([pr,pk])=>{mk(pr,'C',pk);if(VOR[pr])mk(pr,'V',pk,wk(VOR[pr][0]),wkEnd(VOR[pr][1]));mk(pr,'E',pk,wk(0),wkEnd(12))});
   const FORP={'P-24-0860':['pkW2',wk(0),wkEnd(11)],'P-24-0861':['pkW4',wk(3),wkEnd(4)],'P-24-0862':['pkW2',wk(1),wkEnd(8)],'P-24-0863':['pkW1',wk(6),wkEnd(8)]};
   Object.entries(FORP).forEach(([pr,[pk,f,t]])=>{mk(pr,'C',pk);mk(pr,'E',pk,f,t)});
   // Neue Projekte, bei denen noch kein Techniker eingeplant ist (zum Ausprobieren der Planung)
-  const NEWP=[['P-24-0870','pkW3',[['E','2026-11-16','2026-12-04']]],['P-24-0871','pkW4',[['E']]],['P-24-0872','pkW1',[['E']]],['P-24-0873','pkW3',[['E','2026-12-07','2026-12-18']]],['P-24-0874','pkW5',[['V','2026-11-23','2026-12-04'],['E','2026-12-07','2026-12-18']]],['P-24-0876','pkW2',[['E']]]];
+  const NEWP=[['P-24-0870','pkW3',[['E','2026-11-23','2026-12-11']]],['P-24-0871','pkW4',[['E']]],['P-24-0872','pkW1',[['E']]],['P-24-0873','pkW3',[['E','2026-12-14','2026-12-25']]],['P-24-0874','pkW5',[['V','2026-11-30','2026-12-11'],['E','2026-12-14','2026-12-25']]],['P-24-0876','pkW2',[['E']]]];
   NEWP.forEach(([pr,pk,l])=>{mk(pr,'C',pk);l.forEach(([k,f,t])=>mk(pr,k,pk,f,t))});
   // Einsatzwochen der Waghäusel-Techniker (Wochenindex ab 28.09.): Vorinbetriebnahme und Auslandseinsätze 2 bis 3 Wochen am Stück, sonst Mo-Fr eine Woche pro Kundenprojekt
   const STINT=[['P-24-0790:V',['t13','t14'],[0,1,2]],['P-24-0801:V',['t15','t16'],[3,4,5]],['P-24-0840:V',['t17','t18'],[6,7,8]],['P-24-0842:V',['t19','t20'],[9,10,11]],
@@ -602,20 +602,20 @@ function init(){
   const descOf=t=>/^Coordination/.test(t)?'Planung und Abstimmung des Projekts: Termine, Material, Kundenkommunikation und Dokumentation.':'Inbetriebnahme: Prüfung, Programmierung, Probelauf und Abnahme.';
   const KZ=['WGI','MHU','TBA','SKR','FLE','JMA','AWE','PSC','DLA','RHO'];
   const wos=WL.map(([id,proj,title,pk,from,to,hpd,pre])=>{const w={id,est:0,proj,title,pk,pre:!!pre,open:true,desc:descOf(title),contact:PR.find(x=>x[0]===proj)[4],docs:/^Coordination/.test(title)?['Projektplan.pdf']:['Arbeitsanweisung.pdf']};if(from){w.from=from;w.to=to;w.hpd=hpd}return w});
-  wos.forEach((w,i)=>{w.wbs=w.proj+(/^Coordination/.test(w.title)?'-01':w.pre?'-02':'-03');w.svc=/^Coordination/.test(w.title)?'Coordination':'Commissioning';w.cs='CS'+String(1201+i*7).padStart(6,'0');w.po='FKRTMBHD'[i%8]+String(10+i*7).slice(-2)+['L1GX','H4MV','T9PD','P7QZ'][i%4];w.st='B'+(1+i%9)+'T'+(10+i*2);w.kz=KZ[(i*3)%KZ.length];{const nm=(w.contact.split(',')[0]||'').toLowerCase().replace(/[^a-zäöüß. ]/g,'').trim().replace(/\s+/g,'.').replace(/\.+/g,'.'),dom=projects[w.proj].customer.toLowerCase().replace(/[^a-z]/g,'')+'.example';w.contactMail=nm+'@'+dom;w.contactTel='+49 '+(800+(i*37)%150)+' '+String(10000+(i*7919)%89999);const INFO=['Anmeldung am Werkstor mindestens 30 Minuten vor Arbeitsbeginn. Persönliche Schutzausrüstung (Sicherheitsschuhe, Warnweste, Helm) mitbringen.','Zutritt nur mit Besucherausweis, bitte beim Pförtner abholen. Notebook mit aktueller Programmversion mitbringen und vor Arbeitsbeginn ein Backup der Steuerung erstellen.','Arbeiten nur nach Absprache mit dem Schichtleiter. Parkplatz Nord (Tor 3). Bei Störungen zuerst den Ansprechpartner anrufen.'];w.info=w.svc==='Coordination'?'':INFO[i%3];w.infoAt=w.info?'30.10. 09:12':''}w.ek=w.pre?['KUKA','DUER','SCHU','AUMA'][i%4]:(ABBR[projects[w.proj].location]||'KUNDE');w.title=woName(w)});
+  wos.forEach((w,i)=>{w.wbs=w.proj+(/^Coordination/.test(w.title)?'-01':w.pre?'-02':'-03');w.svc=/^Coordination/.test(w.title)?'Coordination':'Commissioning';w.cs='CS'+String(1201+i*7).padStart(6,'0');w.po='FKRTMBHD'[i%8]+String(10+i*7).slice(-2)+['L1GX','H4MV','T9PD','P7QZ'][i%4];w.st='B'+(1+i%9)+'T'+(10+i*2);w.kz=KZ[(i*3)%KZ.length];{const nm=(w.contact.split(',')[0]||'').toLowerCase().replace(/[^a-zäöüß. ]/g,'').trim().replace(/\s+/g,'.').replace(/\.+/g,'.'),dom=projects[w.proj].customer.toLowerCase().replace(/[^a-z]/g,'')+'.example';w.contactMail=nm+'@'+dom;w.contactTel='+49 '+(800+(i*37)%150)+' '+String(10000+(i*7919)%89999);const INFO=['Anmeldung am Werkstor mindestens 30 Minuten vor Arbeitsbeginn. Persönliche Schutzausrüstung (Sicherheitsschuhe, Warnweste, Helm) mitbringen.','Zutritt nur mit Besucherausweis, bitte beim Pförtner abholen. Notebook mit aktueller Programmversion mitbringen und vor Arbeitsbeginn ein Backup der Steuerung erstellen.','Arbeiten nur nach Absprache mit dem Schichtleiter. Parkplatz Nord (Tor 3). Bei Störungen zuerst den Ansprechpartner anrufen.'];w.info=w.svc==='Coordination'?'':INFO[i%3];w.infoAt=w.info?'06.11. 09:12':''}w.ek=w.pre?['KUKA','DUER','SCHU','AUMA'][i%4]:(ABBR[projects[w.proj].location]||'KUNDE');w.title=woName(w)});
   S={users,pks,
     teams:['München','Dingolfing','Regensburg','Leipzig','Ergolding','Waghäusel'],
     siteTeam:{'BMW München':'München','BMW Regensburg':'Regensburg','BMW Leipzig':'Leipzig','BMW Dingolfing':'Dingolfing','BMW Landshut':'Ergolding'},
     mgrs:[{id:'g1',name:'Manager A',role:'Manager'},{id:'g2',name:'Manager B',role:'Manager'},{id:'g3',name:'Manager C',role:'Manager'}],admins:[{id:'a1',name:'Admin',role:'Admin'}],
     nphWork:['Support','Internes Projekt','Sales','Verwaltung'],nphAbs:['Abwesenheit'],nph:['Support','Internes Projekt','Sales','Verwaltung','Abwesenheit'],
     projects,wos,asg:[],aid:1,plan:{},entries:[],
-    ho:[{id:'h1',u:'t2',from:'2026-11-03',to:'2026-11-03',note:'',status:'approved',by:'Manager'},{id:'h2',u:'t1',from:'2026-11-09',to:'2026-11-10',note:'Handwerker im Haus',status:'pending'},{id:'h3',u:'t11',from:'2026-11-12',to:'2026-11-12',note:'',status:'pending'},{id:'h4',u:'t3',from:'2026-10-20',to:'2026-10-20',note:'',status:'rejected',by:'Manager'},{id:'h5',u:'t14',from:'2026-11-05',to:'2026-11-06',note:'Büro-Umzug',status:'pending'},{id:'h6',u:'t1',from:'2026-10-20',to:'2026-10-20',note:'',status:'approved',by:'Manager'}],hid:7,
-    runs:[],projLog:[],pplan:{},rsv:[],restypes:[{id:'ty1',name:'Fahrzeug',seats:true}],res:[{id:'r1',ty:'ty1',name:'M-VT 101',desc:'VW Transporter T6',site:'München',seats:3,off:false,blocks:[]},{id:'r2',ty:'ty1',name:'M-VT 102',desc:'VW Caddy',site:'München',seats:2,off:false,blocks:[{f:'2026-11-16',t:'2026-11-18',why:'Inspektion Werkstatt'}]},{id:'r3',ty:'ty1',name:'R-VT 201',desc:'Ford Transit Custom',site:'Regensburg',seats:3,off:false,blocks:[]},{id:'r4',ty:'ty1',name:'L-VT 301',desc:'Skoda Octavia Combi',site:'Leipzig',seats:5,off:false,blocks:[]},{id:'r5',ty:'ty1',name:'DGF-VT 401',desc:'Mercedes Vito',site:'Dingolfing',seats:3,off:false,blocks:[{f:'2026-12-01',t:'2026-12-01',why:'TÜV'}]},{id:'r6',ty:'ty1',name:'M-VT 099',desc:'VW Crafter',site:'München',seats:3,off:true,blocks:[]}],rid3:7,reports:[],rid2:1,nid:1,rid:2,preview:null,lastCsv:null,dec:','
+    ho:[{id:'h1',u:'t2',from:'2026-11-10',to:'2026-11-10',note:'',status:'approved',by:'Manager'},{id:'h2',u:'t1',from:'2026-11-16',to:'2026-11-17',note:'Handwerker im Haus',status:'pending'},{id:'h3',u:'t11',from:'2026-11-19',to:'2026-11-19',note:'',status:'pending'},{id:'h4',u:'t3',from:'2026-10-27',to:'2026-10-27',note:'',status:'rejected',by:'Manager'},{id:'h5',u:'t14',from:'2026-11-16',to:'2026-11-17',note:'Büro-Umzug',status:'pending'},{id:'h6',u:'t1',from:'2026-10-27',to:'2026-10-27',note:'',status:'approved',by:'Manager'}],hid:7,
+    runs:[],projLog:[],pplan:{},rsv:[],restypes:[{id:'ty1',name:'Fahrzeug',seats:true}],res:[{id:'r1',ty:'ty1',name:'M-VT 101',desc:'VW Transporter T6',site:'München',seats:3,off:false,blocks:[]},{id:'r2',ty:'ty1',name:'M-VT 102',desc:'VW Caddy',site:'München',seats:2,off:false,blocks:[{f:'2026-11-23',t:'2026-11-25',why:'Inspektion Werkstatt'}]},{id:'r3',ty:'ty1',name:'R-VT 201',desc:'Ford Transit Custom',site:'Regensburg',seats:3,off:false,blocks:[]},{id:'r4',ty:'ty1',name:'L-VT 301',desc:'Skoda Octavia Combi',site:'Leipzig',seats:5,off:false,blocks:[]},{id:'r5',ty:'ty1',name:'DGF-VT 401',desc:'Mercedes Vito',site:'Dingolfing',seats:3,off:false,blocks:[{f:'2026-12-08',t:'2026-12-08',why:'TÜV'}]},{id:'r6',ty:'ty1',name:'M-VT 099',desc:'VW Crafter',site:'München',seats:3,off:true,blocks:[]}],rid3:7,reports:[],rid2:1,nid:1,rid:2,preview:null,lastCsv:null,dec:','
   };
   S.wos.filter(w=>w.proj==='P-24-0818').forEach(w=>w.open=false);
-  S.wos.filter(w=>w.to&&w.to<'2026-11-02').forEach(w=>w.open=false);
+  S.wos.filter(w=>w.to&&w.to<'2026-11-09').forEach(w=>w.open=false);
   {const PH=['Vorbereitung','Vorinbetriebnahme','Lieferung und Aufbau','Inbetriebnahme Endkunde','Abnahme','Nachbetreuung'];let k=1;
-    S.pplan['P-24-0815']={on:true,ph:[['Vorbereitung','2026-10-12','2026-10-23','done'],['Vorinbetriebnahme','2026-10-26','2026-11-06','run'],['Lieferung und Aufbau','2026-11-09','2026-11-20','open'],['Inbetriebnahme Endkunde','2026-11-23','2026-12-11','open'],['Abnahme','2026-12-14','2026-12-18','open']].map(([k,f,t,st])=>({k,on:true,f,t,st})).concat([{k:'Nachbetreuung',on:false,f:'',t:'',st:'open'}]),amp:'y',blk:'Maschine 3 Tage verspätet',log:[{t:'2026-11-02',by:'PK München',amp:'y',txt:'Lieferung der Maschine verzögert sich, Aufbau rutscht nach hinten.',blk:'Maschine 3 Tage verspätet'}]};
+    S.pplan['P-24-0815']={on:true,ph:[['Vorbereitung','2026-10-19','2026-10-30','done'],['Vorinbetriebnahme','2026-11-02','2026-11-13','run'],['Lieferung und Aufbau','2026-11-16','2026-11-27','open'],['Inbetriebnahme Endkunde','2026-11-30','2026-12-18','open'],['Abnahme','2026-12-21','2026-12-25','open']].map(([k,f,t,st])=>({k,on:true,f,t,st})).concat([{k:'Nachbetreuung',on:false,f:'',t:'',st:'open'}]),amp:'y',blk:'Maschine 3 Tage verspätet',log:[{t:'2026-11-09',by:'PK München',amp:'y',txt:'Lieferung der Maschine verzögert sich, Aufbau rutscht nach hinten.',blk:'Maschine 3 Tage verspätet'}]};
     Object.keys(S.projects).sort((x,y)=>(S.wos.some(w=>w.proj===y&&w.pk==='pkM')?1:0)-(S.wos.some(w=>w.proj===x&&w.pk==='pkM')?1:0)).forEach(n=>{if(k>=3||S.pplan[n])return;const ws=S.wos.filter(w=>w.proj===n&&w.open&&hasPeriod(w));if(ws.length<1)return;const lo=ws.map(w=>w.from).sort()[0],hi=ws.map(w=>w.to).sort().pop();if(lo>=hi)return;
       const tot=Math.round((new Date(hi)-new Date(lo))/864e5)+14,step=Math.max(2,Math.floor(tot/5));let cur=isoAdd(lo,-14);
       const ph=PH.map((nm,i)=>{const f=cur,t=i<5?isoAdd(cur,step-1):'';cur=isoAdd(cur,step);return {k:nm,on:i<5,f:i<5?f:'',t,st:i<5?(t<TODAY?'done':f<=TODAY?'run':'open'):'open'}});
@@ -632,14 +632,14 @@ function init(){
   AS(I('P-24-0832','E'),['t9','t10','s2','s4']);AS(I('P-24-0892','E'),['t9','t10']);AS(I('P-24-0893','E'),['t9']);AS(I('P-24-0830','E'),['t11','t12','s3']);AS(I('P-24-0894','E'),['t11','t12']);AS(I('P-24-0895','E'),['t11']);
   rotAsg.forEach(([id,us,ws])=>ASW(id,us,ws));
   const put=(u,w,d,h,run,nph,abs)=>S.entries.push({id:'e'+S.nid++,u,w:w||null,nph:nph||null,abs:abs||undefined,d,h,run:run||null,rev:null,corrected:false});
-  const ABS=[['t4','2026-10-12','2026-10-16'],['t15','2026-10-26','2026-10-30'],['pkL','2026-10-19','2026-10-21'],['t8','2026-10-05','2026-10-09'],['t12','2026-11-02','2026-11-04'],['t7','2026-11-05','2026-11-06'],['t20','2026-11-09','2026-11-13'],['t9','2026-11-16','2026-11-20'],['pkW3','2026-11-23','2026-11-27'],['t2','2026-11-23','2026-11-24']];
+  const ABS=[['t4','2026-10-19','2026-10-23'],['t15','2026-11-02','2026-11-06'],['pkL','2026-10-26','2026-10-28'],['t8','2026-10-12','2026-10-16'],['t12','2026-11-09','2026-11-11'],['t7','2026-11-12','2026-11-13'],['t20','2026-11-16','2026-11-20'],['t9','2026-11-23','2026-11-27'],['pkW3','2026-11-30','2026-12-04'],['t2','2026-11-30','2026-12-01']];
   const absOnSeed=(u,d)=>ABS.some(a=>a[0]===u&&a[1]<=d&&d<=a[2]);
   ABS.forEach(([u,f,t])=>{for(let d=f;d<=t;d=isoAdd(d,1))if(!isWeekend(d))put(u,null,d,8,null,'Abwesenheit',true)});
   // Remote-Workorders: Techniker mit Zeitraum können mehrere parallel bearbeiten (zählt nicht doppelt)
   ['P-24-0841','P-24-0843'].forEach(pr=>{wo(I(pr,'E')).remote=true});
   {const cand=S.wos.find(w=>w.open&&hasPeriod(w)&&!w.remote&&w.from>TODAY&&wdList(w.from,w.to).length>=8);if(cand){const ds=wdList(cand.from,cand.to);const au=S.asg.filter(a=>a.w===cand.id).map(a=>a.u);au.forEach((x,i)=>{cand.rph=(cand.rph||[]).concat([{u:x,f:ds[Math.ceil(ds.length/2)+(i%2?2:0)],t:ds[ds.length-1]}])})}}
   {const drv=w=>(S.asg.find(a=>a.w===w&&!/^pk/.test(a.u))||{}).u||null, pm=S.wos.find(w=>w.pk==='pkM'&&w.open);
-    if(pm)S.rsv.push({id:'v1',res:'r1',w:pm.id,f:'2026-11-09',t:'2026-11-13',u:drv(pm.id)});
+    if(pm)S.rsv.push({id:'v1',res:'r1',w:pm.id,f:'2026-11-16',t:'2026-11-20',u:drv(pm.id)});
     S.wos.filter(w=>w.open&&hasPeriod(w)&&w.to>=TODAY&&w.pk!=='pkM'&&w.pk!=='pkD').slice(0,2).forEach((w,i)=>{const r=['r3','r4'][i];if(!S.rsv.some(x=>x.res===r&&x.f<=w.to&&x.t>=w.from)&&!S.res.find(q=>q.id===r).blocks.some(b=>b.f<=w.to&&b.t>=w.from))S.rsv.push({id:'v'+(i+2),res:r,w:w.id,f:w.from,t:w.to,u:drv(w.id)})});S.rid3=Math.max(S.rid3,20);S.rsv.forEach(x=>{if(x.u&&!x.by)x.by='self'});[['1002','BMW Regensburg'],['1008','BMW Dingolfing']].forEach(([id,st])=>{const w=S.wos.find(x=>x.id===id);if(w&&w.svc!=='Coordination'&&!w.pre)w.site=st})}
   ['t13','t14'].forEach(u=>{let n=0;for(let i=0;i<13&&n<4;i++){const ds=wdList(wk(i),wkEnd(i));if(ds.every(d=>plannedSum(u,d)===0&&!absOnSeed(u,d))){['P-24-0841','P-24-0843'].forEach(pr=>{const id=I(pr,'E');if(!S.asg.some(a=>a.w===id&&a.u===u))S.asg.push({id:'a'+S.aid++,w:id,u});ds.forEach(d=>{S.plan[u+'|'+id+'|'+d]=wo(id).hpd||8})});n++}}});
   const TT={'München':['Support','Support','Verwaltung','Internes Projekt'],'Regensburg':['Verwaltung','Verwaltung','Support','Sales'],'Dingolfing':['Internes Projekt','Support','Support','Verwaltung'],'Ergolding':['Sales','Sales','Support','Verwaltung'],'Leipzig':['Support','Verwaltung','Internes Projekt','Sales'],'Waghäusel':['Sales','Internes Projekt','Verwaltung','Support','Support']};
@@ -664,12 +664,12 @@ function init(){
           else if(act.length>1&&rng()<0.4){const a=Math.ceil(prod*0.65),b=prod-a;put(u.id,act[0].id,d,a,run);put(u.id,act[1].id,d,b,run);n+=2}
           else{put(u.id,act[0].id,d,prod,run);n++}}
       }});return n};
-  const nOct=gen('2026-10-01','2026-10-30','ER-0000',null,0.04);
-  S.entries.filter(e=>e.w&&hasPeriod(wo(e.w))&&e.d<'2026-11-01').forEach((e,i)=>{const k=e.u+'|'+e.w+'|'+e.d;if(i%11===5)return;S.plan[k]=e.h+(i%29===3?1:0)});
-  S.runs.push({id:'ER-0000',file:'zeiten_20261102-0100_ER-0000.csv',count:nOct,status:'von SAP bestätigt',csv:''});
-  const nNov=gen('2026-11-02','2026-11-04',null,'2026-11-04',0.06);
-  S.entries.filter(e=>e.d==='2026-11-02'&&e.w).forEach(e=>e.run='ER-0001');
-  S.runs.push({id:'ER-0001',file:'zeiten_20261102-0200_ER-0001.csv',count:S.entries.filter(e=>e.run==='ER-0001').length,status:'von SAP bestätigt',csv:''});
+  const nOct=gen('2026-10-01','2026-11-06','ER-0000',null,0.04);
+  S.entries.filter(e=>e.w&&hasPeriod(wo(e.w))&&e.d<'2026-11-08').forEach((e,i)=>{const k=e.u+'|'+e.w+'|'+e.d;if(i%11===5)return;S.plan[k]=e.h+(i%29===3?1:0)});
+  S.runs.push({id:'ER-0000',file:'zeiten_20261109-0100_ER-0000.csv',count:nOct,status:'von SAP bestätigt',csv:''});
+  const nNov=gen('2026-11-09','2026-11-13',null,'2026-11-13',0.06);
+  S.entries.filter(e=>e.d==='2026-11-09'&&e.w).forEach(e=>e.run='ER-0001');
+  S.runs.push({id:'ER-0001',file:'zeiten_20261109-0200_ER-0001.csv',count:S.entries.filter(e=>e.run==='ER-0001').length,status:'von SAP bestätigt',csv:''});
   S.wos.forEach(w=>{const b=woBooked(w.id);w.est=Math.max(60,Math.ceil(b*(1.3+rng()*1.3)/20)*20);if(hasPeriod(w))w.est=Math.max(60,Math.ceil(Math.max(woPlanned(w.id),woBooked(w.id))*1.1/20)*20)});
   // Tätigkeitstexte für Buchungen (Grundlage der Serviceberichte)
   {const POOL={Commissioning:['Anlage in Betrieb genommen, Schnittstellen geprüft','Software auf SPS eingespielt und Funktionstest durchgeführt','Antriebe parametriert, Kommunikationsfehler behoben','Abnahmetest mit Kunde, Restpunkte dokumentiert','Fehleranalyse an der Anlage, Programmablauf nachgebessert','Bediener geschult, Dokumentation übergeben','Sensorik justiert und Anlagenlauf optimiert'],Coordination:['Abstimmung mit Kunde und Projektteam','Terminplanung und Dokumentation aktualisiert']};
@@ -679,15 +679,15 @@ function init(){
    const g={};S.entries.forEach(e=>{if(!e.w||e.rev||e.corrected||!(e.h>0)||e.d>=TODAY)return;if(isRem(wo(e.w),e.d,e.u))return;const k=e.u+'|'+e.w;(g[k]=g[k]||[]).push(e.d)});
    const keys=Object.keys(g).filter(k=>new Set(g[k]).size>=3).sort((a,b)=>(a.startsWith('t1|')?0:1)-(b.startsWith('t1|')?0:1)||(a<b?-1:1)).slice(0,7);
    const ST=['signed','signed','closed','draft','signed','closed','draft'],CUS=['Herr Maier','Frau Berger','Herr Schulz','Frau Wagner','Herr Koch','Frau Lang','Herr Vogel'];
-   keys.forEach((k,i)=>{const [u,w]=k.split('|'),ds=[...new Set(g[k])].sort().slice(-5),st=ST[i];const r={id:'SB-'+String(S.rid2++).padStart(4,'0'),w,u,f:ds[0],t:ds[ds.length-1],status:st,result:i%2?'Anlage läuft stabil. Restpunkte werden im nächsten Einsatz erledigt.':'Alle Arbeiten wie besprochen abgeschlossen.',signer:'',sigC:null,sigT:null,created:'03.11. 14:20'};
-     if(st==='signed'){r.signer=CUS[i];r.sigC=sigImg(i+1);r.sigT=sigImg(i+5);r.signedAt='04.11. 09:05'}
-     if(st!=='draft')r.closedAt=r.signedAt||'04.11. 09:05';
+   keys.forEach((k,i)=>{const [u,w]=k.split('|'),ds=[...new Set(g[k])].sort().slice(-5),st=ST[i];const r={id:'SB-'+String(S.rid2++).padStart(4,'0'),w,u,f:ds[0],t:ds[ds.length-1],status:st,result:i%2?'Anlage läuft stabil. Restpunkte werden im nächsten Einsatz erledigt.':'Alle Arbeiten wie besprochen abgeschlossen.',signer:'',sigC:null,sigT:null,created:'12.11. 14:20'};
+     if(st==='signed'){r.signer=CUS[i];r.sigC=sigImg(i+1);r.sigT=sigImg(i+5);r.signedAt='13.11. 09:05'}
+     if(st!=='draft')r.closedAt=r.signedAt||'13.11. 09:05';
      S.reports.push(r);if(st!=='draft')r.snap=repData(r)})}
-  UI={app:APP,pf:'all',pq:'',pkProj:null,pw:null,adTab:'users',tp:'w45',pa:{u:null,from:null,to:null,h:8},tm:{open:null},hr:{from:null,to:null,note:''},ab:{u:'t1',from:null,to:null,h:8},bk:{d:null},nr:{from:null,to:null,h:null},ttab:'home',ap:null,vb:{w:null,f:null,t:null,res:''},ab2:{rng:'day',from:null,to:null,h:8},nphCat:S.nph[0],monthOpen:true,pcal:{m:'2026-11',d:TODAY},qb:{mode:"wo",wo:null,cat:null,h:null,from:null,to:null,more:false,rng:"day"},showAll:false,view:'tech',pkWo:null,pkRep:null,woFilter:'open',nw:{proj:'',title:'',svc:'',cs:'',po:'',st:'',kz:'',wbs:'',ek:'',desc:'',contact:'',est:40,per:false,from:'',to:'',hpd:8,sel:[],extra:[]},mg:{tab:'planer',cust:'all',wo:'all',tech:'all',dept:'all',vm:'detail',cell:null,day:null,period:'w45',team:'all',loc:'all',group:'user',sel:null},tmode:'list',tcal:{m:'2026-11',d:TODAY},cal:{d:TODAY,m:'2026-11',proj:'all',svc:'all',u:'all',q:'',mine:false},pkTab:'proj',pl:{svc:[],hide:[],blick:false,color:'loc',day:null,mode:'tech',start:'2026-11-02',weeks:4,tool:'move',proj:[],cust:[],team:[],closed:false,sel:null,msg:null},plm:{svc:[],hide:[],blick:true,layer:'all',only:true,drw:null,hdone:false,dept:[],tech:[],color:'loc',day:null,mode:'tech',start:'2026-11-02',weeks:4,tool:'move',proj:[],cust:[],team:[],pkf:[],closed:false,sel:null,msg:null},undo:null,addTech:null,newWo:null,wo:null,rep:null,viewRep:null,day:DAYS[2],tech:'t1',pk:'pkM',sel:{u:'t1',d:DAYS[2]},pvU:'t1',openBook:null,edit:null,msg:null};
+  UI={app:APP,pf:'all',pq:'',pkProj:null,pw:null,adTab:'users',tp:'w46',pa:{u:null,from:null,to:null,h:8},tm:{open:null},hr:{from:null,to:null,note:''},ab:{u:'t1',from:null,to:null,h:8},bk:{d:null},nr:{from:null,to:null,h:null},ttab:'home',ap:null,vb:{w:null,f:null,t:null,res:''},ab2:{rng:'day',from:null,to:null,h:8},nphCat:S.nph[0],monthOpen:true,pcal:{m:'2026-11',d:TODAY},qb:{mode:"wo",wo:null,cat:null,h:null,from:null,to:null,more:false,rng:"day"},showAll:false,view:'tech',pkWo:null,pkRep:null,woFilter:'open',nw:{proj:'',title:'',svc:'',cs:'',po:'',st:'',kz:'',wbs:'',ek:'',desc:'',contact:'',est:40,per:false,from:'',to:'',hpd:8,sel:[],extra:[]},mg:{tab:'planer',cust:'all',wo:'all',tech:'all',dept:'all',vm:'detail',cell:null,day:null,period:'w46',team:'all',loc:'all',group:'user',sel:null},tmode:'list',tcal:{m:'2026-11',d:TODAY},cal:{d:TODAY,m:'2026-11',proj:'all',svc:'all',u:'all',q:'',mine:false},pkTab:'proj',pl:{svc:[],hide:[],blick:false,color:'loc',day:null,mode:'tech',start:'2026-11-09',weeks:4,tool:'move',proj:[],cust:[],team:[],closed:false,sel:null,msg:null},plm:{svc:[],hide:[],blick:true,layer:'all',only:true,drw:null,hdone:false,dept:[],tech:[],color:'loc',day:null,mode:'tech',start:'2026-11-09',weeks:4,tool:'move',proj:[],cust:[],team:[],pkf:[],closed:false,sel:null,msg:null},undo:null,addTech:null,newWo:null,wo:null,rep:null,viewRep:null,day:TODAY,tech:'t1',pk:'pkM',sel:{u:'t1',d:TODAY},pvU:'t1',openBook:null,edit:null,msg:null};
   S.notes=[{id:'n1',u:'t1',type:'asg',title:'Neu zugeteilt',text:`${woLabel(I('P-24-0888','E'))} · ${placeOf(wo(I('P-24-0888','E')))} · laufend, ohne festen Zeitraum`,link:{k:'wo',w:I('P-24-0888','E')},t:'Heute 07:58',read:false,key:null},
-    {id:'n2',u:'t1',type:'ho',title:'Homeoffice genehmigt',text:'20.10.2026',link:{k:'ho',f:'approved'},t:'20.10. 16:40',read:true,key:null},
-    {id:'n3',u:'t17',type:'per',title:'Zeitraum geändert',text:`${woLabel(I('P-24-0840','E'))}: jetzt ${perTxt(wo(I('P-24-0840','E')))} (vorher 28.09.2026 bis 11.12.2026).`,link:{k:'wo',w:I('P-24-0840','E')},t:'Gestern 15:12',read:false,key:null}];
-  S.techNotes={[I('P-24-0815','E')+'|t1']:{text:'Material für den Kabelkanal fehlt noch, Lieferung laut Kunde am Freitag.',at:'03.11. 16:20'}};
+    {id:'n2',u:'t1',type:'ho',title:'Homeoffice genehmigt',text:'27.10.2026',link:{k:'ho',f:'approved'},t:'27.10. 16:40',read:true,key:null},
+    {id:'n3',u:'t17',type:'per',title:'Zeitraum geändert',text:`${woLabel(I('P-24-0840','E'))}: jetzt ${perTxt(wo(I('P-24-0840','E')))} (vorher 05.10.2026 bis 18.12.2026).`,link:{k:'wo',w:I('P-24-0840','E')},t:'Gestern 15:12',read:false,key:null}];
+  S.techNotes={[I('P-24-0815','E')+'|t1']:{text:'Material für den Kabelkanal fehlt noch, Lieferung laut Kunde am Freitag.',at:'12.11. 16:20'}};
   trimDemo();
   S.nnid=100;NB=noteSnap();
 }
@@ -698,19 +698,19 @@ function trimDemo(){
   const planDays=(u,w,f,t,h)=>wdList(f,t).forEach(d=>{if(!absHours(u,d))S.plan[u+'|'+w.id+'|'+d]=h||w.hpd||8});
   const wkOf=i=>isoAdd(wkMon(TODAY),i*7);
   // Waghäusel: ausschließlich Projekte mit Zeitraum. Neue Projekte ohne Techniker (zum Zuteilen im Plan)
-  [[63,'2026-11-30','2026-12-11'],[65,'2026-12-14','2026-12-23'],[72,'2026-11-23','2026-12-04']].forEach(([n,f,t])=>{const w=W(n);if(w){w.from=f;w.to=t;w.hpd=8}});
+  [[63,'2026-12-07','2026-12-18'],[65,'2026-12-21','2026-12-30'],[72,'2026-11-30','2026-12-11']].forEach(([n,f,t])=>{const w=W(n);if(w){w.from=f;w.to=t;w.hpd=8}});
   // Freie Slots: jeder Waghäusel-Techniker ist in einigen kommenden Wochen nicht verplant
   const wt=S.users.filter(u=>u.team==='Waghäusel'&&!u.isPk);
   wt.forEach((u,i)=>{for(let w=1;w<=12;w++){if((i*3+w*5)%7<2){const ws=wkOf(w);for(let k=0;k<7;k++){const d=isoAdd(ws,k);Object.keys(S.plan).forEach(key=>{if(key.startsWith(u.id+'|')&&key.endsWith('|'+d))delete S.plan[key]})}}}});
   // Einsatzort weicht vom Besteller ab
   if(W(2))W(2).site='BMW Regensburg';if(W(8))W(8).site='BMW Dingolfing';if(W(59))W(59).site='BMW Landshut';
   // Aushilfen aus anderen Teams: München-Techniker bei einem Waghäusel-Projekt, Waghäusel-Techniker bei einem laufenden Dingolfing-Auftrag
-  if(W(43)){asg(W(43),'t2');planDays('t2',W(43),'2026-11-16','2026-11-20',8)}
+  if(W(43)){asg(W(43),'t2');planDays('t2',W(43),'2026-11-23','2026-11-27',8)}
   {const dg=S.wos.find(w=>w.proj==='P-24-0891'&&w.svc==='Commissioning');asg(dg,'t18')}
   // Wochenendeinsatz in Waghäusel (Samstag und Sonntag)
-  if(W(44)){const a=assigneesAll(W(44).id).find(u=>!/^pk/.test(u)&&!absHours(u,'2026-11-28')&&!['2026-11-28','2026-11-29'].some(d=>plannedSum(u,d)>0));if(a){S.plan[a+'|'+W(44).id+'|2026-11-28']=8;S.plan[a+'|'+W(44).id+'|2026-11-29']=8}}
+  if(W(44)){const a=assigneesAll(W(44).id).find(u=>!/^pk/.test(u)&&!absHours(u,'2026-12-05')&&!['2026-12-05','2026-12-06'].some(d=>plannedSum(u,d)>0));if(a){S.plan[a+'|'+W(44).id+'|2026-12-05']=8;S.plan[a+'|'+W(44).id+'|2026-12-06']=8}}
   // Überplanung vermeiden: je Tag nur der erste Einsatz bleibt, wenn mehr geplant ist als verfügbar
-  wt.concat(S.users.filter(u=>!u.isPk&&u.team!=='Waghäusel')).forEach(u=>{for(let d='2026-09-28';d<='2027-01-31';d=isoAdd(d,1)){if(isWeekend(d))continue;if(plannedSum(u.id,d)>avail(u.id,d)+.01){const ks=Object.keys(S.plan).filter(k=>k.startsWith(u.id+'|')&&k.endsWith('|'+d));ks.slice(1).forEach(k=>{delete S.plan[k]});if(plannedSum(u.id,d)>avail(u.id,d)+.01){const k=ks[0];if(avail(u.id,d)<=0)delete S.plan[k];else S.plan[k]=avail(u.id,d)}}}});
+  wt.concat(S.users.filter(u=>!u.isPk&&u.team!=='Waghäusel')).forEach(u=>{for(let d='2026-10-05';d<='2027-02-07';d=isoAdd(d,1)){if(isWeekend(d))continue;if(plannedSum(u.id,d)>avail(u.id,d)+.01){const ks=Object.keys(S.plan).filter(k=>k.startsWith(u.id+'|')&&k.endsWith('|'+d));ks.slice(1).forEach(k=>{delete S.plan[k]});if(plannedSum(u.id,d)>avail(u.id,d)+.01){const k=ks[0];if(avail(u.id,d)<=0)delete S.plan[k];else S.plan[k]=avail(u.id,d)}}}});
   // Abwesenheit über geplantem Einsatz: Plantage freigeben, die Demo startet ohne Konflikte
   plConflicts(null).forEach(g=>g.days.forEach(d=>{delete S.plan[g.u+'|'+g.w+'|'+d]}));
   {const v=S.rsv.find(x=>x.id==='v1');if(v&&W(2))v.w=W(2).id}
@@ -1594,7 +1594,7 @@ function vMgPlan(){
   return `<div class="row"><select data-c="pw" aria-label="Woche">${CAL_WEEKS.map(w=>`<option value="${w}" ${w===wk?'selected':''}>KW ${KW(w)} · ${fd(w)}–${fd(isoAdd(w,4))}</option>`).join('')}</select><span class="small muted">Tagesplanung aller Techniker. Die Zuteilung zu Aufträgen macht der PK, Aufträge mit Zeitraum sind vorbelegt.</span></div>
   <div class="card"><div class="scroll"><table class="grid"><thead><tr><th></th>${head}</tr></thead><tbody>${rows}</tbody></table></div></div>${editor}`;
 }
-const CAL_WEEKS=['2026-11-02','2026-11-09','2026-11-16','2026-11-23','2026-11-30'];
+const CAL_WEEKS=['2026-11-09','2026-11-16','2026-11-23','2026-11-30','2026-12-07'];
 function isoAdd(d,n){const t=new Date(d+'T00:00:00Z');t.setUTCDate(t.getUTCDate()+n);return t.toISOString().slice(0,10)}
 const KW=d=>{const t=new Date(d+'T00:00:00Z');const day=(t.getUTCDay()+6)%7;t.setUTCDate(t.getUTCDate()-day+3);const f=new Date(Date.UTC(t.getUTCFullYear(),0,4));return 1+Math.round(((t-f)/864e5-3+((f.getUTCDay()+6)%7))/7)};
 const projHue=n=>{const i=Object.keys(S.projects).indexOf(n);return (i*67+195)%360};
@@ -2070,7 +2070,7 @@ function vWo(){
     const cnt=x=>all.filter(([k])=>x==='none'?!nMine(k):x==='mine'?nMine(k)>0:true).length;
     return `${head}${steps}
     <div class="note">Projekte und Stammdaten (Nummer, Kunde, Standort, Ansprechpartner, PSP-Elemente, Verantwortlicher) kommen aus SAP. Du siehst nur die Projekte, bei denen du in SAP als Verantwortliche(r) eingetragen bist. Wähle zuerst das Projekt, danach legst du die passenden Workorders dazu an.</div>
-    <div class="card"><div class="row" style="justify-content:space-between"><div><h2>SAP-Projekte</h2><div class="small muted">Stand der Projektliste: ${S.sapStand||'04.11.2026 02:00'} · ${Object.keys(S.projects).length} Projekte, automatisch aus dem SAP-Austauschordner</div></div><button class="btn sec" data-a="sapReload">Aus SAP aktualisieren</button></div>
+    <div class="card"><div class="row" style="justify-content:space-between"><div><h2>SAP-Projekte</h2><div class="small muted">Stand der Projektliste: ${S.sapStand||'13.11.2026 02:00'} · ${Object.keys(S.projects).length} Projekte, automatisch aus dem SAP-Austauschordner</div></div><button class="btn sec" data-a="sapReload">Aus SAP aktualisieren</button></div>
       ${UI.nwSync?`<div class="msg ok" style="margin-top:8px">${UI.nwSync}</div>`:''}
       <div class="row" style="margin-top:10px"><input type="search" id="nwq" placeholder="Suchen: Nummer, Name, Kunde, Standort" value="${UI.nwq||''}" aria-label="SAP-Projekt suchen" style="max-width:340px">
         ${[['all','Alle'],['none','Ohne Workorder von mir'],['mine','Mit Workorders von mir']].map(([k,l])=>`<button class="tog ${f===k?'on':''}" data-a="nwFilter" data-f="${k}">${l} (${cnt(k)})</button>`).join('')}</div>
